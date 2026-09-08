@@ -17,8 +17,8 @@
   <meta content='summary_large_image' name='twitter:card'/>
   <meta content='إذاعة القرآن الكريم - بث مباشر' property='twitter:title'/>
   <meta content='استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة من ثلاث إذاعات: السعودية، الجزائر ومصر.' property='twitter:description'/>
-  <meta expr:content='data:blog.canonicalUrl + &quot;../icon-512.png&quot;' property='og:image'/>
-  <meta expr:content='data:blog.canonicalUrl + &quot;../icon-512.png&quot;' property='twitter:image'/>
+  <meta content='https://quran-radio-ten.vercel.app/icon-512.png' property='og:image'/>
+  <meta content='https://quran-radio-ten.vercel.app/icon-512.png' property='twitter:image'/>
 
   <link crossorigin='anonymous' href='https://fonts.gstatic.com' rel='preconnect'/>
   <link href='https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&amp;display=swap' rel='stylesheet'/>
