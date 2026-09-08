@@ -478,6 +478,26 @@
       .btn-circle.secondary{width:42px;height:42px}
     }
 
+    /* ---------- Desktop (wide screens) ---------- */
+    @media (min-width:1024px){
+      .intro-content{max-width:940px}
+      .glass-card{
+        display:grid;
+        grid-template-columns:1.05fr 1fr;
+        gap:clamp(20px,2.4vw,30px);
+        align-items:start;
+        padding:clamp(26px,2.6vw,34px);
+      }
+      .main-title{font-size:clamp(26px,2.1vw,31px);margin-top:14px}
+      .context-text{font-size:14.5px;margin-bottom:16px;max-width:48ch}
+      .radio-selector{margin-bottom:0}
+      .player-shell{padding:16px}
+      .eq-advanced{height:56px}
+      .btn-circle{width:48px;height:48px;font-size:17px}
+      .btn-circle.secondary{width:42px;height:42px;font-size:14px}
+      .share-btn{min-height:40px;padding:9px 14px;font-size:13.5px}
+      .subscribe-title{font-size:16px}
+    }
     @media (prefers-reduced-motion:reduce){
       *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
       body.radio-playing .eq-bar{transform:scaleY(.6)}
@@ -548,6 +568,7 @@
     <div class='intro-content'>
       <div class='glass-card'>
 
+        <div class='intro-col intro-col-info'>
         <div class='card-header'>
           <div class='live-label'>
             <span class='live-dot'/>
@@ -574,6 +595,10 @@
             </select>
           </div>
         </div>
+
+      </div>
+
+      <div class='intro-col intro-col-player'>
 
         <div class='player-shell'>
 
@@ -664,6 +689,7 @@
           </div>
         </div>
 
+      </div>
       </div>
     </div>
   </main>
