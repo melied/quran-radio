@@ -486,6 +486,16 @@
       .btn-circle.secondary{width:42px;height:42px}
     }
 
+    /* ---------- Sleep timer ---------- */
+    .sleep-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:2px}
+    .sleep-opt{
+      padding:9px 10px;border-radius:10px;border:1px solid var(--line);
+      background:rgba(15,107,82,.06);color:var(--ink);font-family:inherit;
+      font-size:13px;font-weight:700;cursor:pointer;transition:background .2s ease,border-color .2s ease;
+    }
+    .sleep-opt:hover{background:rgba(15,107,82,.12)}
+    .sleep-opt.active{background:var(--primary);border-color:var(--primary);color:#fff}
+    .sleep-opt.sleep-off{grid-column:1/-1;color:var(--live);border-color:rgba(214,59,59,.25);background:rgba(214,59,59,.06)}
     /* ---------- Desktop (wide screens) ---------- */
     @media (min-width:1024px){
       .intro-content{max-width:940px}
@@ -525,11 +535,11 @@
   <video aria-hidden='true' id='bgVideo' loop='loop' muted='muted' playsinline='playsinline' preload='none'></video>
   <div id='bgOverlay'></div>
 
-  <button aria-controls='settingsMenu' aria-expanded='false' aria-label='تغيير الخلفية' class='settings-btn' id='settingsBtn' type='button'>
+  <button aria-controls='settingsMenu' aria-expanded='false' aria-label='الإعدادات' class='settings-btn' id='settingsBtn' type='button'>
     <i aria-hidden='true' class='fa-solid fa-gear'></i>
   </button>
 
-  <div aria-label='إعدادات الخلفية' class='settings-menu' id='settingsMenu' role='dialog'>
+  <div aria-label='الإعدادات' class='settings-menu' id='settingsMenu' role='dialog'>
     <div class='settings-title'>
       <i aria-hidden='true' class='fa-solid fa-image'></i>
       <span>تغيير الخلفية</span>
@@ -563,6 +573,22 @@
       <div class='url-input-row'>
         <input dir='ltr' id='videoUrlInput' inputmode='url' placeholder='https://example.com/video.mp4' type='text'></i>
         <button id='applyVideoUrl' type='button'>تطبيق</button>
+      </div>
+    </div>
+
+    <div class='settings-separator'></div>
+
+    <div class='sleep-group' role='group' aria-label='مؤقّت النوم'>
+      <div class='settings-title'>
+        <i aria-hidden='true' class='fa-solid fa-moon'></i>
+        <span>مؤقّت النوم</span>
+      </div>
+      <div class='sleep-grid'>
+        <button class='sleep-opt' data-min='15' type='button'>15 دقيقة</button>
+        <button class='sleep-opt' data-min='30' type='button'>30 دقيقة</button>
+        <button class='sleep-opt' data-min='45' type='button'>45 دقيقة</button>
+        <button class='sleep-opt' data-min='60' type='button'>60 دقيقة</button>
+        <button class='sleep-opt sleep-off' data-min='0' id='sleepOff' type='button'>إيقاف المؤقت</button>
       </div>
     </div>
 
@@ -912,6 +938,7 @@
     function startStream(){
       clearTimeout(retryTimer);
       wantPlaying = true;
+      if(tabChannel) tabChannel.postMessage({ type: 'play', tabId: TAB_ID });
       setPlayIcon(false, true);
       setStatus('جارٍ الاتصال بالبث...', 'playing');
       source.src = radios[currentIndex].url;
@@ -1011,6 +1038,79 @@
         navigator.mediaSession.setActionHandler('previoustrack', function(){ changeRadio((currentIndex - 1 + radios.length) % radios.length, true); });
       }catch(e){}
     }
+
+    /* ---------- Sleep timer ---------- */
+    var sleepEndAt = 0, sleepTick = null, sleepBaseVolume = null;
+    var sleepOpts = Array.prototype.slice.call(document.querySelectorAll('.sleep-opt'));
+    function fmtRemain(ms){
+      var s = Math.max(0, Math.round(ms / 1000));
+      var m = Math.floor(s / 60); s = s % 60;
+      return m + ':' + (s < 10 ? '0' : '') + s;
+    }
+    function sleepRestoreVolume(){
+      if(sleepBaseVolume !== null){
+        audio.volume = sleepBaseVolume;
+        volumeRange.value = sleepBaseVolume;
+        setRangeFill();
+        store.set('hqr-volume', String(sleepBaseVolume));
+        sleepBaseVolume = null;
+      }
+    }
+    function sleepClearUI(){
+      sleepOpts.forEach(function(b){ b.classList.remove('active'); });
+      $('sleepOff').textContent = 'إيقاف المؤقت';
+    }
+    function sleepCancel(msg){
+      clearInterval(sleepTick); sleepTick = null; sleepEndAt = 0;
+      sleepRestoreVolume();
+      sleepClearUI();
+      if(msg) toast(msg);
+    }
+    function sleepSet(minutes){
+      sleepCancel();
+      if(!minutes){ toast('تم إلغاء مؤقّت النوم'); return; }
+      sleepBaseVolume = audio.volume;
+      sleepEndAt = Date.now() + minutes * 60000;
+      sleepOpts.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-min') === String(minutes)); });
+      $('sleepOff').textContent = 'إيقاف (' + minutes + ' د)';
+      toast('سيتم إيقاف البث بعد ' + minutes + ' دقيقة');
+      sleepTick = setInterval(function(){
+        var remain = sleepEndAt - Date.now();
+        if(remain <= 0){
+          var wasPlaying = wantPlaying;
+          sleepCancel(wasPlaying ? 'انتهى مؤقّت النوم — تم إيقاف البث' : 'انتهى مؤقّت النوم');
+          if(wasPlaying) stopStream();
+          return;
+        }
+        if(remain <= 15000 && sleepBaseVolume !== null){
+          audio.volume = Math.max(0, sleepBaseVolume * (remain / 15000));
+        }
+        $('sleepOff').textContent = 'إيقاف (' + fmtRemain(remain) + ')';
+      }, 500);
+    }
+    sleepOpts.forEach(function(b){
+      b.addEventListener('click', function(){ sleepSet(parseInt(b.getAttribute('data-min'), 10) || 0); });
+    });
+
+    /* ---------- Cross-tab sync (one playing tab at a time) ---------- */
+    var TAB_ID = Math.random().toString(36).slice(2);
+    var tabChannel = null;
+    try{
+      if('BroadcastChannel' in window){
+        tabChannel = new BroadcastChannel('holy-quran-radio');
+        tabChannel.onmessage = function(ev){
+          var msg = ev.data || {};
+          if(msg.type === 'play' && msg.tabId !== TAB_ID && wantPlaying){
+            wantPlaying = false;
+            retryCount = 0;
+            clearTimeout(retryTimer);
+            audio.pause();
+            setPlayIcon(false);
+            setStatus('يجري التشغيل في تبويب آخر', null);
+          }
+        };
+      }
+    }catch(e){ tabChannel = null; }
 
     /* Restore preferences */
     var savedVol = parseFloat(store.get('hqr-volume'));
