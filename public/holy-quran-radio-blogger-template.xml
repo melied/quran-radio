@@ -480,8 +480,8 @@
 
     /* ---------- Sleep timer (visible quick row) ---------- */
     .sleep-quick{
-      display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-      margin-top:12px;padding:10px 12px;
+      display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+      margin-top:12px;padding:8px 10px;
       border:1px dashed var(--line);border-radius:14px;
       background:rgba(15,107,82,.05);
     }
@@ -489,9 +489,9 @@
     .sq-title i{color:var(--gold)}
     .sq-btns{display:flex;gap:6px;flex-wrap:wrap;margin-inline-start:auto}
     .sq{
-      min-width:46px;padding:7px 10px;border-radius:999px;
+      min-width:34px;padding:6px 8px;border-radius:999px;
       border:1px solid var(--line);background:#fff;color:var(--ink);
-      font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer;
+      font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;
       transition:background .2s ease,border-color .2s ease,color .2s ease;
     }
     .sq:hover{border-color:var(--primary);color:var(--primary-dark)}
@@ -683,15 +683,15 @@
         <div class='sleep-quick' role='group' aria-label='مؤقّت النوم — إيقاف تلقائي للبث'>
           <span class='sq-title'>
             <i aria-hidden='true' class='fa-solid fa-moon'></i>
-            مؤقّت النوم
+            مؤقّت النوم (دقائق)
           </span>
           <div class='sq-btns'>
-            <button class='sq' data-min='5' type='button'>5 د</button>
-            <button class='sq' data-min='10' type='button'>10 د</button>
-            <button class='sq' data-min='15' type='button'>15 د</button>
-            <button class='sq' data-min='30' type='button'>30 د</button>
-            <button class='sq' data-min='45' type='button'>45 د</button>
-            <button class='sq' data-min='60' type='button'>60 د</button>
+            <button class='sq' data-min='5' type='button'>5</button>
+            <button class='sq' data-min='10' type='button'>10</button>
+            <button class='sq' data-min='15' type='button'>15</button>
+            <button class='sq' data-min='30' type='button'>30</button>
+            <button class='sq' data-min='45' type='button'>45</button>
+            <button class='sq' data-min='60' type='button'>60</button>
             <button class='sq sq-x' data-min='0' id='sleepOff' type='button'>إلغاء</button>
           </div>
         </div>
