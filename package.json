@@ -1,7 +1,8 @@
 {
-  "name": "my-project",
+  "name": "quran-radio",
   "version": "0.1.0",
   "private": true,
+  "description": "إذاعة القرآن الكريم — صفحة بث مباشر كقالب Blogger وصفحة ويب ثابتة",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

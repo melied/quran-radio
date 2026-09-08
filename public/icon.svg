@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0e2f27"/>
+      <stop offset="1" stop-color="#0b1f1a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dcbf6f"/>
+      <stop offset="1" stop-color="#c9a24a"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <rect x="4" y="4" width="56" height="56" rx="11" fill="none" stroke="#c9a24a" stroke-opacity=".45" stroke-width="1.5"/>
+  <path d="M32 12c-6.6 0-12 1.8-12 4v26c0 2.2 5.4 4 12 4s12-1.8 12-4V16c0-2.2-5.4-4-12-4z" fill="url(#gold)"/>
+  <ellipse cx="32" cy="16" rx="12" ry="4" fill="#e3c37e"/>
+  <ellipse cx="32" cy="16" rx="9" ry="2.6" fill="#8a6a2a"/>
+  <path d="M27 25v14M32 27v14M37 25v14" stroke="#0b1f1a" stroke-width="2.2" stroke-linecap="round" opacity=".55"/>
+  <circle cx="46" cy="42" r="9" fill="none" stroke="#7fd6ae" stroke-width="2.4"/>
+  <path d="M46 36v6l4 3" stroke="#7fd6ae" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+</svg>
