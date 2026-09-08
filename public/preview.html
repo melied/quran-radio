@@ -349,7 +349,6 @@
       box-shadow:none;
     }
     .btn-circle.secondary:hover{background:rgba(15,107,82,.08)}
-    .btn-circle.secondary.active{background:var(--gold);border-color:var(--gold);color:var(--primary-dark)}
     .btn-circle.is-loading i{animation:spin 1s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -487,16 +486,26 @@
       .btn-circle.secondary{width:42px;height:42px}
     }
 
-    /* ---------- Sleep timer ---------- */
-    .sleep-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:2px}
-    .sleep-opt{
-      padding:9px 10px;border-radius:10px;border:1px solid var(--line);
-      background:rgba(15,107,82,.06);color:var(--ink);font-family:inherit;
-      font-size:13px;font-weight:700;cursor:pointer;transition:background .2s ease,border-color .2s ease;
+    /* ---------- Sleep timer (visible quick row) ---------- */
+    .sleep-quick{
+      display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+      margin-top:12px;padding:10px 12px;
+      border:1px dashed var(--line);border-radius:14px;
+      background:rgba(15,107,82,.05);
     }
-    .sleep-opt:hover{background:rgba(15,107,82,.12)}
-    .sleep-opt.active{background:var(--primary);border-color:var(--primary);color:#fff}
-    .sleep-opt.sleep-off{grid-column:1/-1;color:var(--live);border-color:rgba(214,59,59,.25);background:rgba(214,59,59,.06)}
+    .sq-title{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:var(--primary-dark);white-space:nowrap}
+    .sq-title i{color:var(--gold)}
+    .sq-btns{display:flex;gap:6px;flex-wrap:wrap;margin-inline-start:auto}
+    .sq{
+      min-width:46px;padding:7px 10px;border-radius:999px;
+      border:1px solid var(--line);background:#fff;color:var(--ink);
+      font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer;
+      transition:background .2s ease,border-color .2s ease,color .2s ease;
+    }
+    .sq:hover{border-color:var(--primary);color:var(--primary-dark)}
+    .sq.active{background:var(--primary);border-color:var(--primary);color:#fff}
+    .sq-x{color:var(--live);border-color:rgba(214,59,59,.25)}
+    .sq-x:hover{border-color:var(--live);color:var(--live)}
     /* ---------- Desktop (wide screens) ---------- */
     @media (min-width:1024px){
       .intro-content{max-width:940px}
@@ -536,11 +545,11 @@
   <video aria-hidden='true' id='bgVideo' loop='loop' muted='muted' playsinline='playsinline' preload='none'></video>
   <div id='bgOverlay'></div>
 
-  <button aria-controls='settingsMenu' aria-expanded='false' aria-label='الإعدادات' class='settings-btn' id='settingsBtn' type='button'>
+  <button aria-controls='settingsMenu' aria-expanded='false' aria-label='تغيير الخلفية' class='settings-btn' id='settingsBtn' type='button'>
     <i aria-hidden='true' class='fa-solid fa-gear'></i>
   </button>
 
-  <div aria-label='الإعدادات' class='settings-menu' id='settingsMenu' role='dialog'>
+  <div aria-label='إعدادات الخلفية' class='settings-menu' id='settingsMenu' role='dialog'>
     <div class='settings-title'>
       <i aria-hidden='true' class='fa-solid fa-image'></i>
       <span>تغيير الخلفية</span>
@@ -574,22 +583,6 @@
       <div class='url-input-row'>
         <input dir='ltr' id='videoUrlInput' inputmode='url' placeholder='https://example.com/video.mp4' type='text'></i>
         <button id='applyVideoUrl' type='button'>تطبيق</button>
-      </div>
-    </div>
-
-    <div class='settings-separator'></div>
-
-    <div class='sleep-group' role='group' aria-label='مؤقّت النوم'>
-      <div class='settings-title'>
-        <i aria-hidden='true' class='fa-solid fa-moon'></i>
-        <span>مؤقّت النوم</span>
-      </div>
-      <div class='sleep-grid'>
-        <button class='sleep-opt' data-min='15' type='button'>15 دقيقة</button>
-        <button class='sleep-opt' data-min='30' type='button'>30 دقيقة</button>
-        <button class='sleep-opt' data-min='45' type='button'>45 دقيقة</button>
-        <button class='sleep-opt' data-min='60' type='button'>60 دقيقة</button>
-        <button class='sleep-opt sleep-off' data-min='0' id='sleepOff' type='button'>إيقاف المؤقت</button>
       </div>
     </div>
 
@@ -664,9 +657,6 @@
             <button aria-label='كتم الصوت' aria-pressed='false' class='btn-circle secondary' id='muteBtn' type='button'>
               <i aria-hidden='true' class='fa-solid fa-volume-high'></i>
             </button>
-            <button aria-label='مؤقّت النوم' aria-pressed='false' class='btn-circle secondary' id='sleepBtn' type='button'>
-              <i aria-hidden='true' class='fa-solid fa-moon'></i>
-            </button>
 
             <div class='control-group'>
               <span class='control-label' id='volumeLabel'>مستوى الصوت</span>
@@ -696,6 +686,20 @@
             <span class='eq-bar' style='--d:0s'></span>
           </div>
 
+        </div>
+
+        <div class='sleep-quick' role='group' aria-label='مؤقّت النوم — إيقاف تلقائي للبث'>
+          <span class='sq-title'>
+            <i aria-hidden='true' class='fa-solid fa-moon'></i>
+            مؤقّت النوم
+          </span>
+          <div class='sq-btns'>
+            <button class='sq' data-min='15' type='button'>15 د</button>
+            <button class='sq' data-min='30' type='button'>30 د</button>
+            <button class='sq' data-min='45' type='button'>45 د</button>
+            <button class='sq' data-min='60' type='button'>60 د</button>
+            <button class='sq sq-x' data-min='0' id='sleepOff' type='button'>إلغاء</button>
+          </div>
         </div>
 
         <div class='share-block'>
@@ -1045,8 +1049,7 @@
 
     /* ---------- Sleep timer ---------- */
     var sleepEndAt = 0, sleepTick = null, sleepBaseVolume = null;
-    var sleepOpts = Array.prototype.slice.call(document.querySelectorAll('.sleep-opt'));
-    var sleepBtn = $('sleepBtn');
+    var sleepOpts = Array.prototype.slice.call(document.querySelectorAll('.sq'));
     function fmtRemain(ms){
       var s = Math.max(0, Math.round(ms / 1000));
       var m = Math.floor(s / 60); s = s % 60;
@@ -1063,8 +1066,7 @@
     }
     function sleepClearUI(){
       sleepOpts.forEach(function(b){ b.classList.remove('active'); });
-      if(sleepBtn) sleepBtn.classList.remove('active');
-      $('sleepOff').textContent = 'إيقاف المؤقت';
+      $('sleepOff').textContent = 'إلغاء';
     }
     function sleepCancel(msg){
       clearInterval(sleepTick); sleepTick = null; sleepEndAt = 0;
@@ -1078,8 +1080,7 @@
       sleepBaseVolume = audio.volume;
       sleepEndAt = Date.now() + minutes * 60000;
       sleepOpts.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-min') === String(minutes)); });
-      if(sleepBtn) sleepBtn.classList.add('active');
-      $('sleepOff').textContent = 'إيقاف (' + minutes + ' د)';
+      $('sleepOff').textContent = 'إلغاء (' + minutes + ' د)';
       toast('سيتم إيقاف البث بعد ' + minutes + ' دقيقة');
       sleepTick = setInterval(function(){
         var remain = sleepEndAt - Date.now();
@@ -1092,19 +1093,12 @@
         if(remain <= 15000 && sleepBaseVolume !== null){
           audio.volume = Math.max(0, sleepBaseVolume * (remain / 15000));
         }
-        $('sleepOff').textContent = 'إيقاف (' + fmtRemain(remain) + ')';
+        $('sleepOff').textContent = 'إلغاء (' + fmtRemain(remain) + ')';
       }, 500);
     }
     sleepOpts.forEach(function(b){
       b.addEventListener('click', function(){ sleepSet(parseInt(b.getAttribute('data-min'), 10) || 0); });
     });
-
-    var openSleepSection = function(){
-      setMenu(true);
-      var g = document.querySelector('.sleep-group');
-      if(g && g.scrollIntoView){ try{ g.scrollIntoView({ block: 'center', behavior: 'smooth' }); }catch(e){ g.scrollIntoView(); } }
-    };
-    if(sleepBtn) sleepBtn.addEventListener('click', openSleepSection);
 
     /* ---------- Cross-tab sync (one playing tab at a time) ---------- */
     var TAB_ID = Math.random().toString(36).slice(2);
