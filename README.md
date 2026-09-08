@@ -11,6 +11,11 @@
 
 **النسخة الحية (Blogger):** <https://holy-quran-radio1.blogspot.com>
 
+<div align="center">
+  <img src="docs/quran-radio-screenshot.png" alt="لقطة من واجهة إذاعة القرآن الكريم — بث مباشر" width="760" />
+  <p>🎬 <a href="docs/quran-radio.mp4">فيديو العرض التوضيحي (اضغط للمشاهدة)</a></p>
+</div>
+
 ---
 
 ## المزايا
