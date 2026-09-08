@@ -341,6 +341,7 @@
       box-shadow:none;
     }
     .btn-circle.secondary:hover{background:rgba(15,107,82,.08)}
+    .btn-circle.secondary.active{background:var(--gold);border-color:var(--gold);color:var(--primary-dark)}
     .btn-circle.is-loading i{animation:spin 1s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -654,6 +655,9 @@
             </button>
             <button aria-label='كتم الصوت' aria-pressed='false' class='btn-circle secondary' id='muteBtn' type='button'>
               <i aria-hidden='true' class='fa-solid fa-volume-high'/>
+            </button>
+            <button aria-label='مؤقّت النوم' aria-pressed='false' class='btn-circle secondary' id='sleepBtn' type='button'>
+              <i aria-hidden='true' class='fa-solid fa-moon'></i>
             </button>
 
             <div class='control-group'>
@@ -1034,6 +1038,7 @@
     /* ---------- Sleep timer ---------- */
     var sleepEndAt = 0, sleepTick = null, sleepBaseVolume = null;
     var sleepOpts = Array.prototype.slice.call(document.querySelectorAll('.sleep-opt'));
+    var sleepBtn = $('sleepBtn');
     function fmtRemain(ms){
       var s = Math.max(0, Math.round(ms / 1000));
       var m = Math.floor(s / 60); s = s % 60;
@@ -1050,6 +1055,7 @@
     }
     function sleepClearUI(){
       sleepOpts.forEach(function(b){ b.classList.remove('active'); });
+      if(sleepBtn) sleepBtn.classList.remove('active');
       $('sleepOff').textContent = 'إيقاف المؤقت';
     }
     function sleepCancel(msg){
@@ -1064,6 +1070,7 @@
       sleepBaseVolume = audio.volume;
       sleepEndAt = Date.now() + minutes * 60000;
       sleepOpts.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-min') === String(minutes)); });
+      if(sleepBtn) sleepBtn.classList.add('active');
       $('sleepOff').textContent = 'إيقاف (' + minutes + ' د)';
       toast('سيتم إيقاف البث بعد ' + minutes + ' دقيقة');
       sleepTick = setInterval(function(){
@@ -1083,6 +1090,13 @@
     sleepOpts.forEach(function(b){
       b.addEventListener('click', function(){ sleepSet(parseInt(b.getAttribute('data-min'), 10) || 0); });
     });
+
+    var openSleepSection = function(){
+      setMenu(true);
+      var g = document.querySelector('.sleep-group');
+      if(g && g.scrollIntoView){ try{ g.scrollIntoView({ block: 'center', behavior: 'smooth' }); }catch(e){ g.scrollIntoView(); } }
+    };
+    if(sleepBtn) sleepBtn.addEventListener('click', openSleepSection);
 
     /* ---------- Cross-tab sync (one playing tab at a time) ---------- */
     var TAB_ID = Math.random().toString(36).slice(2);
