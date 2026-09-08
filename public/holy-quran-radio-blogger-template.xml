@@ -487,6 +487,7 @@
     }
     .sq-title{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:var(--primary-dark);white-space:nowrap}
     .sq-title i{color:var(--gold)}
+    .sq-title-short{display:none}
     .sq-btns{display:flex;gap:6px;flex-wrap:wrap;margin-inline-start:auto}
     .sq{
       min-width:34px;padding:6px 8px;border-radius:999px;
@@ -516,6 +517,8 @@
       .btn-circle{width:48px;height:48px;font-size:17px}
       .btn-circle.secondary{width:42px;height:42px;font-size:14px}
       .share-btn{min-height:40px;padding:9px 14px;font-size:13.5px}
+      .sq-title{display:none}
+      .sq-title-short{display:inline-flex}
       .subscribe-title{font-size:16px}
     }
     @media (prefers-reduced-motion:reduce){
@@ -685,6 +688,7 @@
             <i aria-hidden='true' class='fa-solid fa-moon'></i>
             مؤقّت النوم (دقائق)
           </span>
+          <span class='sq-title sq-title-short' aria-hidden='true'>مؤقّت:</span>
           <div class='sq-btns'>
             <button class='sq' data-min='5' type='button'>5</button>
             <button class='sq' data-min='10' type='button'>10</button>
