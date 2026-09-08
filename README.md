@@ -13,7 +13,8 @@
 
 <div align="center">
   <img src="docs/quran-radio-screenshot.png" alt="لقطة من واجهة إذاعة القرآن الكريم — بث مباشر" width="760" />
-  <p>🎬 <a href="docs/quran-radio.mp4">فيديو العرض التوضيحي (اضغط للمشاهدة)</a></p>
+  <img src="docs/quran-radio-demo.gif" alt="عرض توضيحي متحرك لواجهة الإذاعة — يعمل تلقائيًا" width="700" />
+  <p>🎬 <a href="docs/quran-radio.mp4">فيديو العرض التوضيحي بجودة كاملة (اضغط للمشاهدة)</a></p>
 </div>
 
 ---
