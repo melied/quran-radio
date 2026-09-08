@@ -538,7 +538,7 @@
       </div>
     </div>
 
-    <p class='settings-note'>يُحفظ اختيارك بالرابط في هذا الجهاز. الملفات المرفوعة تظهر في هذه الجلسة فقط.</p>
+    <p class='settings-note'>يُحفظ اختيارك في هذا الجهاز، بما فيه الصور والفيديوهات المرفوعة من جهازك، ويُستعاد تلقائيًا عند فتح الصفحة.</p>
   </div>
 
   <input accept='image/*' id='imageUpload' type='file'/>
@@ -748,33 +748,86 @@
     }
     function isHttpUrl(u){ return /^https:\/\/\S+/i.test(u); }
 
-    optGradient.addEventListener('click', function(){ switchBg('gradient'); store.del('hqr-bg'); });
+    optGradient.addEventListener('click', function(){ switchBg('gradient'); store.del('hqr-bg'); idbDel(['image','video']); });
     optImage.addEventListener('click', function(){ $('imageUpload').click(); });
     optVideo.addEventListener('click', function(){ $('videoUpload').click(); });
 
     $('applyImageUrl').addEventListener('click', function(){
       var url = $('imageUrlInput').value.trim();
-      if(isHttpUrl(url)){ applyImage(url, true); toast('تم تطبيق الخلفية'); }
+      if(isHttpUrl(url)){ applyImage(url, true); idbDel(['image','video']); toast('تم تطبيق الخلفية'); }
       else toast('الرجاء إدخال رابط صورة صالح يبدأ بـ https://');
     });
     $('applyVideoUrl').addEventListener('click', function(){
       var url = $('videoUrlInput').value.trim();
-      if(isHttpUrl(url)){ applyVideo(url, true); toast('تم تطبيق الخلفية'); }
+      if(isHttpUrl(url)){ applyVideo(url, true); idbDel(['image','video']); toast('تم تطبيق الخلفية'); }
       else toast('الرجاء إدخال رابط فيديو صالح يبدأ بـ https://');
     });
 
+    var maxStoredUploadMB = 250;
     $('imageUpload').addEventListener('change', function(e){
       var file = e.target.files[0];
       if(!file || file.type.indexOf('image/') !== 0) return;
       if(uploadedImageUrl && uploadedImageUrl.indexOf('blob:') === 0) URL.revokeObjectURL(uploadedImageUrl);
       applyImage(URL.createObjectURL(file), false);
+      if(file.size <= maxStoredUploadMB * 1024 * 1024){
+        idbDel(['video']);
+        idbPut('image', file);
+        store.set('hqr-bg', JSON.stringify({type:'upload-image'}));
+        toast('تم تطبيق الخلفية وحفظها في هذا الجهاز');
+      }else{
+        toast('الملف كبير جدًا للحفظ — سيظهر في هذه الجلسة فقط');
+      }
     });
     $('videoUpload').addEventListener('change', function(e){
       var file = e.target.files[0];
       if(!file || file.type.indexOf('video/') !== 0) return;
       if(uploadedVideoUrl && uploadedVideoUrl.indexOf('blob:') === 0) URL.revokeObjectURL(uploadedVideoUrl);
       applyVideo(URL.createObjectURL(file), false);
+      if(file.size <= maxStoredUploadMB * 1024 * 1024){
+        idbDel(['image']);
+        idbPut('video', file);
+        store.set('hqr-bg', JSON.stringify({type:'upload-video'}));
+        toast('تم تطبيق الخلفية وحفظها في هذا الجهاز');
+      }else{
+        toast('الملف كبير جدًا للحفظ — سيظهر في هذه الجلسة فقط');
+      }
     });
+
+    /* ---------- Background file storage (IndexedDB) ---------- */
+    var idb = null, pendingUploadRestore = null;
+    try{
+      var idbReq = indexedDB.open('holy-quran-radio', 1);
+      idbReq.onupgradeneeded = function(){ idbReq.result.createObjectStore('bg'); };
+      idbReq.onsuccess = function(){
+        idb = idbReq.result;
+        if(pendingUploadRestore){ var k = pendingUploadRestore; pendingUploadRestore = null; restoreUpload(k); }
+      };
+      idbReq.onerror = function(){ idb = null; };
+    }catch(e){ idb = null; }
+
+    function idbPut(key, blob){
+      if(!idb) return;
+      try{ idb.transaction('bg','readwrite').objectStore('bg').put(blob, key); }catch(e){}
+    }
+    function idbDel(keys){
+      if(!idb) return;
+      try{ var tx = idb.transaction('bg','readwrite'); for(var i=0;i<keys.length;i++) tx.objectStore('bg').delete(keys[i]); }catch(e){}
+    }
+    function idbGet(key, cb){
+      if(!idb){ cb(null); return; }
+      try{
+        var rq = idb.transaction('bg','readonly').objectStore('bg').get(key);
+        rq.onsuccess = function(){ cb(rq.result || null); };
+        rq.onerror = function(){ cb(null); };
+      }catch(e){ cb(null); }
+    }
+    function restoreUpload(kind){
+      idbGet(kind, function(blob){
+        if(!blob) return;
+        if(kind === 'image') applyImage(URL.createObjectURL(blob), false);
+        else applyVideo(URL.createObjectURL(blob), false);
+      });
+    }
 
     (function restoreBg(){
       var saved = store.get('hqr-bg');
@@ -782,7 +835,9 @@
       try{
         var bg = JSON.parse(saved);
         if(bg.type === 'image' && isHttpUrl(bg.url)){ $('imageUrlInput').value = bg.url; applyImage(bg.url, false); }
-        if(bg.type === 'video' && isHttpUrl(bg.url)){ $('videoUrlInput').value = bg.url; applyVideo(bg.url, false); }
+        else if(bg.type === 'video' && isHttpUrl(bg.url)){ $('videoUrlInput').value = bg.url; applyVideo(bg.url, false); }
+        else if(bg.type === 'upload-image'){ if(idb) restoreUpload('image'); else pendingUploadRestore = 'image'; }
+        else if(bg.type === 'upload-video'){ if(idb) restoreUpload('video'); else pendingUploadRestore = 'video'; }
       }catch(e){}
     })();
 
