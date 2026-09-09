@@ -10,13 +10,13 @@
   <title><data:blog.pageTitle/></title>
 
   <meta content='إذاعة القرآن الكريم - بث مباشر' property='og:title'/>
-  <meta content='استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة من ثلاث إذاعات: السعودية، الجزائر ومصر.' name='description'/>
-  <meta content='استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة من ثلاث إذاعات: السعودية، الجزائر ومصر.' property='og:description'/>
+  <meta content='استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة عبر إذاعات متعددة: السعودية، الجزائر، مصر، التراتيل، العفاسي وعبدالباسط.' name='description'/>
+  <meta content='استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة عبر إذاعات متعددة: السعودية، الجزائر، مصر، التراتيل، العفاسي وعبدالباسط.' property='og:description'/>
   <meta content='website' property='og:type'/>
   <meta expr:content='data:blog.canonicalUrl' property='og:url'/>
   <meta content='summary_large_image' name='twitter:card'/>
   <meta content='إذاعة القرآن الكريم - بث مباشر' property='twitter:title'/>
-  <meta content='استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة من ثلاث إذاعات: السعودية، الجزائر ومصر.' property='twitter:description'/>
+  <meta content='استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة عبر إذاعات متعددة: السعودية، الجزائر، مصر، التراتيل، العفاسي وعبدالباسط.' property='twitter:description'/>
   <meta content='https://quran-radio-ten.vercel.app/icon-512.png' property='og:image'/>
   <meta content='https://quran-radio-ten.vercel.app/icon-512.png' property='twitter:image'/>
 
@@ -615,6 +615,9 @@
               <option value='0'>إذاعة القرآن الكريم - السعودية</option>
               <option value='1'>إذاعة القرآن الكريم - الجزائر</option>
               <option value='2'>إذاعة القرآن الكريم - مصر</option>
+              <option value='3'>إذاعة التراتيل</option>
+              <option value='4'>إذاعة القارئ مشاري العفاسي</option>
+              <option value='5'>إذاعة القارئ عبدالباسط عبدالصمد</option>
             </select>
           </div>
         </div>
@@ -744,7 +747,10 @@
     var radios = [
       { name:'إذاعة القرآن الكريم - السعودية', subtitle:'من المملكة العربية السعودية', url:'https://stream.radiojar.com/0tpy1h0kxtzuv' },
       { name:'إذاعة القرآن الكريم - الجزائر',  subtitle:'من الجمهورية الجزائرية',      url:'https://radiocoran.ice.infomaniak.ch/coran.mp3' },
-      { name:'إذاعة القرآن الكريم - مصر',      subtitle:'من جمهورية مصر العربية',      url:'https://stream.radiojar.com/8s5u5tpdtwzuv' }
+      { name:'إذاعة القرآن الكريم - مصر',      subtitle:'من جمهورية مصر العربية',      url:'https://stream.radiojar.com/8s5u5tpdtwzuv' },
+      { name:'إذاعة التراتيل',                 subtitle:'من شبكة mp3quran',              url:'https://qurango.net/radio/tarateel' },
+      { name:'إذاعة القارئ مشاري العفاسي',     subtitle:'تلاوات مختارة على مدار الساعة', url:'https://backup.qurango.net/radio/mishary_alafasi' },
+      { name:'إذاعة القارئ عبدالباسط عبدالصمد', subtitle:'تلاوات مختارة على مدار الساعة', url:'https://backup.qurango.net/radio/abdulbasit_abdulsamad' }
     ];
 
     var $ = function(id){ return document.getElementById(id); };

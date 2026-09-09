@@ -10,8 +10,8 @@
   <title>إذاعة القرآن الكريم - بث مباشر</title>
 
   <meta content='إذاعة القرآن الكريم - بث مباشر' property='og:title'/>
-  <meta content='استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة من ثلاث إذاعات: السعودية، الجزائر ومصر.' name='description'/>
-  <meta content='استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة من ثلاث إذاعات: السعودية، الجزائر ومصر.' property='og:description'/>
+  <meta content='استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة عبر إذاعات متعددة: السعودية، الجزائر، مصر، التراتيل، العفاسي وعبدالباسط.' name='description'/>
+  <meta content='استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة عبر إذاعات متعددة: السعودية، الجزائر، مصر، التراتيل، العفاسي وعبدالباسط.' property='og:description'/>
   <meta content='website' property='og:type'/>
   <meta content='https://holy-quran-radio1.blogspot.com/' property='og:url'/>
   <meta content='https://quran-radio-ten.vercel.app/icon-512.png' property='og:image'/>
@@ -21,7 +21,7 @@
   <meta content='en_US' property='og:locale:alternate'/>
   <meta content='summary_large_image' name='twitter:card'/>
   <meta content='إذاعة القرآن الكريم - بث مباشر' property='twitter:title'/>
-  <meta content='استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة من ثلاث إذاعات: السعودية، الجزائر ومصر.' property='twitter:description'/>
+  <meta content='استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة عبر إذاعات متعددة: السعودية، الجزائر، مصر، التراتيل، العفاسي وعبدالباسط.' property='twitter:description'/>
   <meta content='https://quran-radio-ten.vercel.app/icon-512.png' property='twitter:image'/>
   <meta content='summary' name='twitter:card'/>
 
@@ -507,6 +507,16 @@
     .sq.active{background:var(--primary);border-color:var(--primary);color:#fff}
     .sq-x{color:var(--live);border-color:rgba(214,59,59,.25)}
     .sq-x:hover{border-color:var(--live);color:var(--live)}
+    /* ---------- Embed mode (iframe widget) ---------- */
+    body.embed-mode .settings-btn{display:none}
+    body.embed-mode #main-intro{padding:10px;align-items:flex-start}
+    body.embed-mode .intro-content{max-width:100%}
+    body.embed-mode .glass-card{display:block;padding:14px;box-shadow:none;border-radius:14px}
+    body.embed-mode .card-header,body.embed-mode .main-title,body.embed-mode .context-text,body.embed-mode .share-block{display:none}
+    body.embed-mode .radio-selector{margin-bottom:12px}
+    body.embed-mode .player-shell{padding:12px}
+    body.embed-mode .eq-advanced{height:44px;margin-top:10px}
+    body.embed-mode .sleep-quick{margin-top:10px}
     /* ---------- Desktop (wide screens) ---------- */
     @media (min-width:1024px){
       .intro-content{max-width:940px}
@@ -623,6 +633,9 @@
               <option value='0'>إذاعة القرآن الكريم - السعودية</option>
               <option value='1'>إذاعة القرآن الكريم - الجزائر</option>
               <option value='2'>إذاعة القرآن الكريم - مصر</option>
+              <option value='3'>إذاعة التراتيل</option>
+              <option value='4'>إذاعة القارئ مشاري العفاسي</option>
+              <option value='5'>إذاعة القارئ عبدالباسط عبدالصمد</option>
             </select>
           </div>
         </div>
@@ -749,10 +762,17 @@
   (function(){
     'use strict';
 
+    /* ---------- Embed mode (iframe widget) ---------- */
+    var isEmbed = /(^|[?&#])embed=1(&|$)/.test(location.search + '&' + location.hash);
+    if(isEmbed){ document.body.classList.add('embed-mode'); }
+
     var radios = [
       { name:'إذاعة القرآن الكريم - السعودية', subtitle:'من المملكة العربية السعودية', url:'https://stream.radiojar.com/0tpy1h0kxtzuv' },
       { name:'إذاعة القرآن الكريم - الجزائر',  subtitle:'من الجمهورية الجزائرية',      url:'https://radiocoran.ice.infomaniak.ch/coran.mp3' },
-      { name:'إذاعة القرآن الكريم - مصر',      subtitle:'من جمهورية مصر العربية',      url:'https://stream.radiojar.com/8s5u5tpdtwzuv' }
+      { name:'إذاعة القرآن الكريم - مصر',      subtitle:'من جمهورية مصر العربية',      url:'https://stream.radiojar.com/8s5u5tpdtwzuv' },
+      { name:'إذاعة التراتيل',                 subtitle:'من شبكة mp3quran',              url:'https://qurango.net/radio/tarateel' },
+      { name:'إذاعة القارئ مشاري العفاسي',     subtitle:'تلاوات مختارة على مدار الساعة', url:'https://backup.qurango.net/radio/mishary_alafasi' },
+      { name:'إذاعة القارئ عبدالباسط عبدالصمد', subtitle:'تلاوات مختارة على مدار الساعة', url:'https://backup.qurango.net/radio/abdulbasit_abdulsamad' }
     ];
 
     var $ = function(id){ return document.getElementById(id); };
@@ -1133,6 +1153,12 @@
     setMuteIcon();
     var savedStation = parseInt(store.get('hqr-station'), 10);
     changeRadio(isNaN(savedStation) || savedStation < 0 || savedStation >= radios.length ? 0 : savedStation, false);
+
+    /* URL station override for embeds (?station=N) */
+    try{
+      var qStation = parseInt(new URLSearchParams(location.search).get('station'), 10);
+      if(!isNaN(qStation) && qStation >= 0 && qStation < radios.length && qStation !== currentIndex){ changeRadio(qStation, false); }
+    }catch(e){}
 
     /* ---------- Share ---------- */
     function pageData(){
