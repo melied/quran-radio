@@ -392,6 +392,15 @@
       padding:6px 12px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;
     }
     .retry-btn.show{display:inline-flex;align-items:center;gap:6px}
+    .install-btn{
+      display:none;
+      border:1px solid var(--gold);background:var(--gold);color:var(--primary-dark);
+      padding:6px 12px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;
+    }
+    .install-btn.show{display:inline-flex;align-items:center;gap:6px}
+    .install-btn i{font-size:12px}
+    .install-btn:hover{filter:brightness(1.06)}
+    body.embed-mode .install-btn{display:none}
 
     /* ---------- Equalizer ---------- */
     .eq-advanced{
@@ -687,6 +696,10 @@
               <span class='status-dot'></span>
               <span id='statusLabel'>جاهز للتشغيل</span>
             </div>
+            <button class='install-btn' id='installBtn' type='button' hidden>
+              <i aria-hidden='true' class='fa-solid fa-download'></i>
+              تثبيت التطبيق
+            </button>
             <button class='retry-btn' id='retryBtn' type='button'>
               <i aria-hidden='true' class='fa-solid fa-rotate-right'></i>
               إعادة الاتصال
@@ -1072,6 +1085,35 @@
         navigator.mediaSession.setActionHandler('previoustrack', function(){ changeRadio((currentIndex - 1 + radios.length) % radios.length, true); });
       }catch(e){}
     }
+
+    /* ---------- PWA: SW + زر التثبيت ---------- */
+    if('serviceWorker' in navigator && location.protocol === 'https:'){
+      window.addEventListener('load', function(){
+        navigator.serviceWorker.register('/sw.js').catch(function(){});
+      });
+    }
+    var installBtn = $('installBtn');
+    var deferredInstall = null;
+    function isStandalone(){
+      return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+    }
+    window.addEventListener('beforeinstallprompt', function(e){
+      e.preventDefault();
+      deferredInstall = e;
+      if(installBtn && !isStandalone() && !document.body.classList.contains('embed-mode')) installBtn.classList.add('show');
+    });
+    if(installBtn){
+      installBtn.addEventListener('click', function(){
+        if(!deferredInstall) return;
+        deferredInstall.prompt();
+        deferredInstall.userChoice.then(function(){ deferredInstall = null; installBtn.classList.remove('show'); }).catch(function(){});
+      });
+    }
+    window.addEventListener('appinstalled', function(){
+      if(installBtn) installBtn.classList.remove('show');
+      toast('تم تثبيت التطبيق بنجاح');
+    });
+    if(installBtn && isStandalone()) installBtn.style.display = 'none';
 
     /* ---------- Sleep timer ---------- */
     var sleepEndAt = 0, sleepTick = null, sleepBaseVolume = null;

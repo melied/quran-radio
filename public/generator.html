@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>مولّد قوالب إذاعة القرآن الكريم</title>
+<style>
+  :root{--bg:#0b1f1a;--card:#122e26;--line:rgba(201,162,74,.2);--line2:rgba(46,163,119,.25);--gold:#c9a24a;--gold-soft:#e3c37e;--green:#2ea377;--ink:#e8f2ec;--muted:#9db8ac;--danger:#e07856}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:var(--ink);line-height:1.8;font-size:15px;
+    background:radial-gradient(circle at 12% 8%,rgba(201,162,74,.10) 0,transparent 40%),linear-gradient(165deg,#0b1f1a 0%,#0e2f27 55%,#081511 100%);
+    min-height:100vh;padding:28px 16px 48px}
+  .wrap{max-width:780px;margin:0 auto}
+  h1{font-size:22px;color:#fff;margin-bottom:6px}
+  .sub{color:var(--muted);margin-bottom:22px;font-size:14px}
+  section{background:var(--card);border:1px solid var(--line2);border-radius:14px;padding:18px;margin-bottom:16px}
+  h2{font-size:15px;color:var(--gold-soft);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  h2::before{content:"";width:9px;height:9px;border-radius:3px;background:linear-gradient(135deg,var(--gold),var(--green))}
+  label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px}
+  input[type=text],input[type=url]{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line2);background:rgba(255,255,255,.06);color:var(--ink);font-family:inherit;font-size:14px}
+  input[type=text]:focus,input[type=url]:focus{outline:none;border-color:var(--green)}
+  .colors{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+  .color-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:10px;padding:10px 12px}
+  .color-row input[type=color]{width:44px;height:34px;border:none;border-radius:8px;background:none;cursor:pointer;padding:0}
+  .color-row span{font-size:13px;color:var(--muted)}
+  .station-row{display:grid;grid-template-columns:1.1fr 1.6fr 38px;gap:8px;margin-bottom:8px}
+  .station-row .del{border:1px solid rgba(224,120,86,.35);background:rgba(224,120,86,.08);color:#f0a284;border-radius:10px;cursor:pointer;font-size:15px}
+  .station-row .del:hover{background:rgba(224,120,86,.18)}
+  .add-btn{border:1px dashed var(--line2);background:none;color:#7fd6ae;border-radius:10px;padding:9px 14px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700}
+  .add-btn:hover{background:rgba(46,163,119,.08)}
+  .hint{font-size:12px;color:var(--muted);margin-top:8px}
+  .generate{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--gold),#1a8a68);color:#06120e;font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;margin-top:4px}
+  .generate:hover{filter:brightness(1.06)}
+  .generate:disabled{opacity:.55;cursor:wait}
+  .status{margin-top:12px;font-size:13.5px;min-height:22px}
+  .status.ok{color:#7fd6ae}
+  .status.err{color:#f0a284}
+  .note{font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.7;border-top:1px solid var(--line2);padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>مولّد قوالب إذاعة القرآن الكريم</h1>
+  <p class="sub">خصّص ألوان القالب وعنوانه وإذاعاته من هنا، وحمّل ملف XML جاهزًا للرفع على بلوجر — دون تعديل أي كود يدويًا.</p>
+
+  <section>
+    <h2>الألوان</h2>
+    <div class="colors">
+      <div class="color-row"><input type="color" id="cPrimary" value="#0f6b52"/><span>اللون الأساسي</span></div>
+      <div class="color-row"><input type="color" id="cBg" value="#0b1f1a"/><span>لون الخلفية</span></div>
+      <div class="color-row"><input type="color" id="cGold" value="#c9a24a"/><span>اللون الذهبي (التمييز)</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>العنوان الرئيسي</h2>
+    <label for="mainTitle">يظهر كعنوان كبير أعلى المشغل</label>
+    <input type="text" id="mainTitle" value="إذاعة القرآن الكريم بث مباشر"/>
+  </section>
+
+  <section>
+    <h2>الإذاعات</h2>
+    <div id="stations"></div>
+    <button class="add-btn" id="addStation" type="button">+ إضافة إذاعة</button>
+    <p class="hint">لكل إذاعة: الاسم كما يظهر في القائمة، ووصف قصير (البلد أو المصدر)، ورابط بث MP3 مباشر. اختبر الرابط قبل الإضافة.</p>
+  </section>
+
+  <section>
+    <button class="generate" id="generateBtn" type="button">توليد القالب وتحميله (XML)</button>
+    <div class="status" id="status"></div>
+    <p class="note">
+      يُجلب القالب الأصلي من هذا الموقع ثم تُطبَّق تخصيصاتك عليه تلقائيًا. بعد التحميل:
+      ارفع الملف في بلوجر عبر <b>المظهر ← السهم بجانب «تخصيص» ← استعادة (Restore)</b>.
+      ملاحظة: الألوان تُطبَّق على العناصر الأساسية، وافتح هذه الصفحة من رابط الموقع نفسه ليعمل الجلب.
+    </p>
+  </section>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var DEFAULTS = [
+    { name:'إذاعة القرآن الكريم - السعودية', sub:'من المملكة العربية السعودية', url:'https://stream.radiojar.com/0tpy1h0kxtzuv' },
+    { name:'إذاعة القرآن الكريم - الجزائر',  sub:'من الجمهورية الجزائرية',      url:'https://radiocoran.ice.infomaniak.ch/coran.mp3' },
+    { name:'إذاعة القرآن الكريم - مصر',      sub:'من جمهورية مصر العربية',      url:'https://stream.radiojar.com/8s5u5tpdtwzuv' },
+    { name:'إذاعة التراتيل',                 sub:'من شبكة mp3quran',            url:'https://qurango.net/radio/tarateel' },
+    { name:'إذاعة القارئ مشاري العفاسي',     sub:'تلاوات مختارة على مدار الساعة', url:'https://backup.qurango.net/radio/mishary_alafasi' },
+    { name:'إذاعة القارئ عبدالباسط عبدالصمد', sub:'تلاوات مختارة على مدار الساعة', url:'https://backup.qurango.net/radio/abdulbasit_abdulsamad' }
+  ];
+
+  var stationsBox = document.getElementById('stations');
+  var statusBox = document.getElementById('status');
+  var genBtn = document.getElementById('generateBtn');
+
+  function el(tag, cls){ var e = document.createElement(tag); if(cls) e.className = cls; return e; }
+
+  function addRow(name, sub, url){
+    var row = el('div', 'station-row');
+    var nameIn = el('input'); nameIn.type = 'text'; nameIn.value = name || ''; nameIn.placeholder = 'اسم الإذاعة';
+    var subIn = el('input'); subIn.type = 'text'; subIn.value = sub || ''; subIn.placeholder = 'وصف قصير (البلد/المصدر)';
+    var urlIn = el('input'); urlIn.type = 'url'; urlIn.value = url || ''; urlIn.placeholder = 'https://رابط-البث.mp3'; urlIn.dir = 'ltr';
+    var del = el('button', 'del'); del.type = 'button'; del.textContent = '✕'; del.title = 'حذف الإذاعة';
+    del.addEventListener('click', function(){ row.remove(); });
+    row.appendChild(nameIn); row.appendChild(urlIn); row.appendChild(subIn); row.appendChild(del);
+    stationsBox.appendChild(row);
+  }
+
+  DEFAULTS.forEach(function(s){ addRow(s.name, s.sub, s.url); });
+  document.getElementById('addStation').addEventListener('click', function(){ addRow('', '', ''); });
+
+  function esc(s){ return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/&/g, '&amp;'); }
+
+  function hex2rgb(hex){
+    var h = hex.replace('#', '');
+    if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)].join(',');
+  }
+  function shade(hex, f){
+    var h = hex.replace('#','');
+    if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    var out = [0,1,2].map(function(i){
+      var c = parseInt(h.slice(i*2, i*2+2), 16);
+      c = Math.max(0, Math.min(255, Math.round(f < 0 ? c * (1 + f) : c + (255 - c) * f)));
+      return ('0' + c.toString(16)).slice(-2);
+    });
+    return '#' + out.join('');
+  }
+
+  function collect(){
+    var rows = stationsBox.querySelectorAll('.station-row');
+    var out = [];
+    rows.forEach(function(row){
+      var inputs = row.querySelectorAll('input');
+      var name = inputs[0].value.trim(), url = inputs[1].value.trim(), sub = inputs[2].value.trim();
+      if (name && /^https:\/\//i.test(url)) out.push({ name: name, sub: sub || name, url: url });
+    });
+    return out;
+  }
+
+  function setStatus(msg, cls){ statusBox.textContent = msg; statusBox.className = 'status ' + (cls || ''); }
+
+  function applyCustom(xml, cfg){
+    function rep(a, b){ xml = xml.split(a).join(b); }
+    /* الألوان: الثوابت ثم صيغ الشفافية ثم الدرجات المشتقة */
+    rep('#0f6b52', cfg.primary);  rep('#0b1f1a', cfg.bg);  rep('#c9a24a', cfg.gold);
+    rep('rgba(15,107,82,', 'rgba(' + hex2rgb(cfg.primary) + ',');
+    rep('rgba(201,162,74,', 'rgba(' + hex2rgb(cfg.gold) + ',');
+    rep('rgba(11,31,26,', 'rgba(' + hex2rgb(cfg.bg) + ',');
+    rep('#0a4d3b', shade(cfg.primary, -0.35));
+    rep('#0e2f27', shade(cfg.bg, 0.12));
+    rep('#07120f', shade(cfg.bg, -0.45));
+    rep('#dcbf6f', shade(cfg.gold, 0.12));
+    /* الإذاعات */
+    var arr = 'var radios = [\n' + cfg.stations.map(function(s, i){
+      return "      { name:'" + esc(s.name) + "', subtitle:'" + esc(s.sub) + "', url:'" + esc(s.url) + "' }" + (i < cfg.stations.length - 1 ? ',' : '');
+    }).join('\n') + '\n    ];';
+    xml = xml.replace(/var radios = \[[\s\S]*?\];/, arr);
+    var opts = "<select id='radioSelect'>\n" + cfg.stations.map(function(s, i){
+      return "              <option value='" + i + "'>" + esc(s.name) + "</option>";
+    }).join('\n') + "\n            </select>";
+    xml = xml.replace(/<select id='radioSelect'>[\s\S]*?<\/select>/, opts);
+    /* العنوان */
+    xml = xml.replace(/<h1 class='main-title'>[\s\S]*?<\/h1>/, "<h1 class='main-title'>" + esc(cfg.title) + '</h1>');
+    xml = xml.replace(/<meta content='إذاعة القرآن الكريم - بث مباشر' property='og:title'\/>/, "<meta content='" + esc(cfg.title).replace(/&lt;/g,'&lt;') + "' property='og:title'/>");
+    return xml;
+  }
+
+  document.getElementById('generateBtn').addEventListener('click', function(){
+    var cfg = {
+      primary: document.getElementById('cPrimary').value,
+      bg: document.getElementById('cBg').value,
+      gold: document.getElementById('cGold').value,
+      title: document.getElementById('mainTitle').value.trim() || 'إذاعة القرآن الكريم بث مباشر',
+      stations: collect()
+    };
+    if (!cfg.stations.length){ setStatus('أضف إذاعة واحدة على الأقل مع رابط بث صحيح يبدأ بـ https://', 'err'); return; }
+    genBtn.disabled = true;
+    setStatus('جارٍ توليد القالب...', '');
+    fetch('holy-quran-radio-blogger-template.xml', { cache: 'no-store' })
+      .then(function(res){
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.text();
+      })
+      .then(function(xml){
+        if (xml.indexOf("b:version='2'") === -1) throw new Error('الملف المجلوب ليس قالب الإذاعة');
+        var out = applyCustom(xml, cfg);
+        var blob = new Blob([out], { type: 'application/xml' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'holy-quran-radio-custom.xml';
+        document.body.appendChild(a); a.click(); a.remove();
+        setStatus('تم توليد القالب وتحميله (' + cfg.stations.length + ' إذاعات) — ارفعه في بلوجر: المظهر ← استعادة', 'ok');
+      })
+      .catch(function(err){
+        setStatus('تعذّر التوليد: ' + err.message + ' — تأكد أنك تفتح هذه الصفحة من رابط الموقع نفسه.', 'err');
+      })
+      .then(function(){ genBtn.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>
