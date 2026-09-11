@@ -384,6 +384,13 @@
       padding:6px 12px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;
     }
     .retry-btn.show{display:inline-flex;align-items:center;gap:6px}
+    .lang-btn{
+      display:inline-flex;align-items:center;
+      border:1px solid var(--line);background:#fff;color:var(--primary-dark);
+      padding:6px 12px;border-radius:999px;font-size:12px;font-weight:800;cursor:pointer;
+      font-family:inherit;
+    }
+    .lang-btn:hover{border-color:var(--primary)}
 
     /* ---------- Equalizer ---------- */
     .eq-advanced{
@@ -547,7 +554,7 @@
   <div aria-label='إعدادات الخلفية' class='settings-menu' id='settingsMenu' role='dialog'>
     <div class='settings-title'>
       <i aria-hidden='true' class='fa-solid fa-image'/>
-      <span>تغيير الخلفية</span>
+      <span id='bgTitleSpan'>تغيير الخلفية</span>
     </div>
 
     <button class='settings-option active' data-bg='gradient' id='optGradient' type='button'>
@@ -566,7 +573,7 @@
     <div class='settings-separator'/>
 
     <div class='url-input-group'>
-      <label for='imageUrlInput'>رابط صورة الخلفية</label>
+      <label for='imageUrlInput' id='imgUrlLabel'>رابط صورة الخلفية</label>
       <div class='url-input-row'>
         <input dir='ltr' id='imageUrlInput' inputmode='url' placeholder='https://example.com/background.jpg' type='text'/>
         <button id='applyImageUrl' type='button'>تطبيق</button>
@@ -574,14 +581,14 @@
     </div>
 
     <div class='url-input-group' style='margin-top:10px'>
-      <label for='videoUrlInput'>رابط فيديو الخلفية</label>
+      <label for='videoUrlInput' id='vidUrlLabel'>رابط فيديو الخلفية</label>
       <div class='url-input-row'>
         <input dir='ltr' id='videoUrlInput' inputmode='url' placeholder='https://example.com/video.mp4' type='text'/>
         <button id='applyVideoUrl' type='button'>تطبيق</button>
       </div>
     </div>
 
-    <p class='settings-note'>يُحفظ اختيارك في هذا الجهاز، بما فيه الصور والفيديوهات المرفوعة من جهازك، ويُستعاد تلقائيًا عند فتح الصفحة.</p>
+    <p class='settings-note' id='settingsNoteP'>يُحفظ اختيارك في هذا الجهاز، بما فيه الصور والفيديوهات المرفوعة من جهازك، ويُستعاد تلقائيًا عند فتح الصفحة.</p>
   </div>
 
   <input accept='image/*' id='imageUpload' type='file'/>
@@ -597,19 +604,19 @@
             <span class='live-dot'/>
             بث مباشر
           </div>
-          <div class='brand-mark'>
+          <div class='brand-mark' id='brandText'>
             <i aria-hidden='true' class='fa-solid fa-book-quran'/>
             إذاعة القرآن الكريم
           </div>
         </div>
 
-        <h1 class='main-title'>إذاعة القرآن الكريم بث مباشر</h1>
-        <p class='context-text'>
+        <h1 class='main-title' id='mainTitleH1'>إذاعة القرآن الكريم بث مباشر</h1>
+        <p class='context-text' id='contextP'>
           استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة، مع بث مستمر بجودة عالية وتجربة استماع هادئة ومريحة على جميع أجهزتك.
         </p>
 
         <div class='radio-selector'>
-          <label for='radioSelect'>اختر الإذاعة</label>
+          <label for='radioSelect' id='selectorLabel'>اختر الإذاعة</label>
           <div class='select-wrap'>
             <select id='radioSelect'>
               <option value='0'>إذاعة القرآن الكريم - السعودية</option>
@@ -642,7 +649,7 @@
                 <div class='player-meta' id='radioMeta'>من المملكة العربية السعودية</div>
               </div>
             </div>
-            <div class='live-chip'>
+            <div class='live-chip' id='liveChip'>
               <span/>
               مباشر الآن
             </div>
@@ -669,6 +676,7 @@
               <span class='status-dot'/>
               <span id='statusLabel'>جاهز للتشغيل</span>
             </div>
+            <button class='lang-btn' id='langBtn' type='button'>EN</button>
             <button class='retry-btn' id='retryBtn' type='button'>
               <i aria-hidden='true' class='fa-solid fa-rotate-right'/>
               إعادة الاتصال
@@ -687,11 +695,11 @@
         </div>
 
         <div class='sleep-quick' role='group' aria-label='مؤقّت النوم — إيقاف تلقائي للبث'>
-          <span class='sq-title'>
+          <span class='sq-title' id='sqTitleLong'>
             <i aria-hidden='true' class='fa-solid fa-moon'></i>
             مؤقّت النوم (دقائق)
           </span>
-          <span class='sq-title sq-title-short' aria-hidden='true'>مؤقّت:</span>
+          <span class='sq-title sq-title-short' aria-hidden='true' id='sqTitleShort'>مؤقّت:</span>
           <div class='sq-btns'>
             <button class='sq' data-min='5' type='button'>5</button>
             <button class='sq' data-min='10' type='button'>10</button>
@@ -704,8 +712,8 @@
         </div>
 
         <div class='share-block'>
-          <h2 class='subscribe-title'>شارك الخير</h2>
-          <p class='share-line'>شارك إذاعة القرآن الكريم واغتنم جبالاً من الحسنات بإذن الله.</p>
+          <h2 class='subscribe-title' id='shareTitleH2'>شارك الخير</h2>
+          <p class='share-line' id='shareLineP'>شارك إذاعة القرآن الكريم واغتنم جبالاً من الحسنات بإذن الله.</p>
 
           <div class='share-bar'>
             <button class='share-btn native' id='nativeShareBtn' type='button'>
@@ -769,6 +777,179 @@
       toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2600);
     }
 
+    /* ---------- i18n (ar/en) ---------- */
+    var I18N = {
+      ar: {
+        docTitle: 'إذاعة القرآن الكريم - بث مباشر',
+        brand: 'إذاعة القرآن الكريم',
+        liveNow: 'مباشر الآن',
+        mainTitle: 'إذاعة القرآن الكريم بث مباشر',
+        context: 'استمع إلى تلاوة عطرة من كتاب الله تعالى على مدار الساعة، مع بث مستمر بجودة عالية وتجربة استماع هادئة ومريحة على جميع أجهزتك.',
+        chooseStation: 'اختر الإذاعة',
+        playNow: 'تشغيل الإذاعة',
+        pauseNow: 'إيقاف البث مؤقتًا',
+        mute: 'كتم الصوت',
+        unmute: 'إلغاء الكتم',
+        volume: 'مستوى الصوت',
+        connecting: 'جارٍ الاتصال بالبث...',
+        pressPlay: 'اضغط تشغيل لبدء الاستماع',
+        stopped: 'البث متوقف',
+        reconnecting: 'انقطع البث، إعادة الاتصال',
+        failover: 'تعذّر الاتصال — انتقال تلقائي إلى',
+        failed: 'تعذّر الاتصال بالبث حالياً',
+        nowPlaying: 'يتم الآن تشغيل البث المباشر',
+        loading: 'جارٍ التحميل...',
+        otherTab: 'يجري التشغيل في تبويب آخر',
+        ready: 'جاهز للتشغيل',
+        retry: 'إعادة الاتصال',
+        shareTitle: 'شارك الخير',
+        shareLine: 'شارك إذاعة القرآن الكريم واغتنم جبالاً من الحسنات بإذن الله.',
+        share: 'مشاركة',
+        copyLink: 'نسخ الرابط',
+        copied: 'تم نسخ الرابط',
+        copyFail: 'لم يتم النسخ، انسخ الرابط من شريط العنوان',
+        sleepSet: 'سيتم إيقاف البث بعد',
+        minutesUnit: 'دقيقة',
+        sleepDone: 'انتهى مؤقّت النوم — تم إيقاف البث',
+        sleepDoneIdle: 'انتهى مؤقّت النوم',
+        sleepOffMsg: 'تم إلغاء مؤقّت النوم',
+        cancel: 'إلغاء',
+        cancelP: 'إلغاء (',
+        bgApplied: 'تم تطبيق الخلفية',
+        bgSaved: 'تم تطبيق الخلفية وحفظها في هذا الجهاز',
+        bgTooBig: 'الملف كبير جدًا للحفظ — سيظهر في هذه الجلسة فقط',
+        bgUrlImg: 'الرجاء إدخال رابط صورة صالح يبدأ بـ https://',
+        bgUrlVid: 'الرجاء إدخال رابط فيديو صالح يبدأ بـ https://',
+        settings: 'تغيير الخلفية',
+        optGradient: 'التدرج الافتراضي',
+        optUploadImg: 'رفع صورة من جهازك',
+        optUploadVid: 'رفع فيديو من جهازك',
+        imgUrlLabel: 'رابط صورة الخلفية',
+        vidUrlLabel: 'رابط فيديو الخلفية',
+        apply: 'تطبيق',
+        settingsNote: 'يُحفظ اختيارك بالرابط في هذا الجهاز. الملفات المرفوعة تظهر في هذه الجلسة فقط.',
+        album: 'إذاعة القرآن الكريم - بث مباشر',
+        installed: 'تم تثبيت التطبيق بنجاح',
+        install: 'تثبيت التطبيق',
+        sleepTitle: 'مؤقّت النوم (دقائق)',
+        sleepTitleShort: 'مؤقّت:',
+        sleepQuickAria: 'مؤقّت النوم — إيقاف تلقائي للبث',
+        langBtn: 'EN'
+      },
+      en: {
+        docTitle: 'Holy Quran Radio - Live',
+        brand: 'Holy Quran Radio',
+        liveNow: 'LIVE',
+        mainTitle: 'Holy Quran Radio - Live Broadcast',
+        context: 'Listen to a beautiful recitation of the Holy Quran around the clock, with continuous high-quality streaming and a calm listening experience on all your devices.',
+        chooseStation: 'Choose a station',
+        playNow: 'Play the radio',
+        pauseNow: 'Pause the stream',
+        mute: 'Mute',
+        unmute: 'Unmute',
+        volume: 'Volume',
+        connecting: 'Connecting to the stream...',
+        pressPlay: 'Press play to start listening',
+        stopped: 'Stream stopped',
+        reconnecting: 'Stream interrupted, reconnecting',
+        failover: 'Connection failed - switching to',
+        failed: 'Could not connect to the stream right now',
+        nowPlaying: 'Now playing the live stream',
+        loading: 'Loading...',
+        otherTab: 'Playing in another tab',
+        ready: 'Ready to play',
+        retry: 'Reconnect',
+        shareTitle: 'Share the good deed',
+        shareLine: 'Share the Holy Quran Radio and earn great rewards.',
+        share: 'Share',
+        copyLink: 'Copy link',
+        copied: 'Link copied',
+        copyFail: 'Copy failed - copy the link from the address bar',
+        sleepSet: 'The stream will stop after',
+        minutesUnit: 'min',
+        sleepDone: 'Sleep timer finished - stream stopped',
+        sleepDoneIdle: 'Sleep timer finished',
+        sleepOffMsg: 'Sleep timer cancelled',
+        cancel: 'Cancel',
+        cancelP: 'Cancel (',
+        bgApplied: 'Background applied',
+        bgSaved: 'Background applied and saved on this device',
+        bgTooBig: 'File too large to save - it will show for this session only',
+        bgUrlImg: 'Please enter a valid image link starting with https://',
+        bgUrlVid: 'Please enter a valid video link starting with https://',
+        settings: 'Change background',
+        optGradient: 'Default gradient',
+        optUploadImg: 'Upload an image from your device',
+        optUploadVid: 'Upload a video from your device',
+        imgUrlLabel: 'Background image URL',
+        vidUrlLabel: 'Background video URL',
+        apply: 'Apply',
+        settingsNote: 'Your choice is saved on this device. Uploaded files show for this session only.',
+        album: 'Holy Quran Radio - Live',
+        installed: 'App installed successfully',
+        install: 'Install app',
+        sleepTitle: 'Sleep timer (minutes)',
+        sleepTitleShort: 'Timer:',
+        sleepQuickAria: 'Sleep timer - auto-stop',
+        langBtn: 'ع'
+      }
+    };
+    var LANG = store.get('hqr-lang') || 'ar';
+    try{
+      var urlLang = new URLSearchParams(location.search).get('lang');
+      if(urlLang === 'en' || urlLang === 'ar'){ LANG = urlLang; }
+    }catch(e){}
+    if(I18N[LANG] == null){ LANG = 'ar'; }
+    var T = I18N[LANG];
+    function setT(id, txt){
+      var e = document.getElementById(id);
+      if(!e) return;
+      var walker = document.createTreeWalker(e, NodeFilter.SHOW_TEXT, null, false);
+      var last = null, n;
+      while((n = walker.nextNode())){ if(n.textContent.trim()) last = n; }
+      if(last) last.textContent = txt; else e.textContent = txt;
+    }
+    function setAria(id, txt){
+      var e = document.getElementById(id);
+      if(e) e.setAttribute('aria-label', txt);
+    }
+    function applyLang(){
+      document.documentElement.setAttribute('lang', LANG);
+      document.documentElement.setAttribute('dir', LANG === 'en' ? 'ltr' : 'rtl');
+      document.title = T.docTitle;
+      setT('brandText', T.brand);
+      setT('liveChip', T.liveNow);
+      setT('mainTitleH1', T.mainTitle);
+      setT('contextP', T.context);
+      setT('selectorLabel', T.chooseStation);
+      setT('volumeLabel', T.volume);
+      setT('statusLabel', T.ready);
+      setT('retryBtn', T.retry);
+      setT('installBtn', T.install);
+      setT('langBtn', T.langBtn);
+      setT('shareTitleH2', T.shareTitle);
+      setT('shareLineP', T.shareLine);
+      setT('nativeShareBtn', T.share);
+      setT('copyLinkBtn', T.copyLink);
+      setT('sleepTitleLong', T.sleepTitle);
+      setT('sleepTitleShort', T.sleepTitleShort);
+      setT('sleepOff', T.cancel);
+      setT('bgTitleSpan', T.settings);
+      setT('optGradient', T.optGradient);
+      setT('optImage', T.optUploadImg);
+      setT('optVideo', T.optUploadVid);
+      setT('imgUrlLabel', T.imgUrlLabel);
+      setT('vidUrlLabel', T.vidUrlLabel);
+      setT('applyImageUrl', T.apply);
+      setT('applyVideoUrl', T.apply);
+      setT('settingsNoteP', T.settingsNote);
+      setAria('settingsBtn', T.settings);
+      setAria('settingsMenu', T.settings);
+      setAria('sleepQuick', T.sleepQuickAria);
+      setAria('playPauseBtn', wantPlaying ? T.pauseNow : T.playNow);
+      setAria('muteBtn', audio.muted ? T.unmute : T.mute);
+      if(typeof updateMediaSession === 'function') updateMediaSession(wantPlaying ? 'playing' : 'paused');
+    }
     /* ---------- Background settings ---------- */
     var settingsBtn = $('settingsBtn'), settingsMenu = $('settingsMenu');
     var bgGradient = $('bgGradient'), bgImage = $('bgImage'), bgVideo = $('bgVideo');
@@ -826,13 +1007,13 @@
 
     $('applyImageUrl').addEventListener('click', function(){
       var url = $('imageUrlInput').value.trim();
-      if(isHttpUrl(url)){ applyImage(url, true); idbDel(['image','video']); toast('تم تطبيق الخلفية'); }
-      else toast('الرجاء إدخال رابط صورة صالح يبدأ بـ https://');
+      if(isHttpUrl(url)){ applyImage(url, true); idbDel(['image','video']); toast(T.bgApplied); }
+      else toast(T.bgUrlImg);
     });
     $('applyVideoUrl').addEventListener('click', function(){
       var url = $('videoUrlInput').value.trim();
-      if(isHttpUrl(url)){ applyVideo(url, true); idbDel(['image','video']); toast('تم تطبيق الخلفية'); }
-      else toast('الرجاء إدخال رابط فيديو صالح يبدأ بـ https://');
+      if(isHttpUrl(url)){ applyVideo(url, true); idbDel(['image','video']); toast(T.bgApplied); }
+      else toast(T.bgUrlVid);
     });
 
     var maxStoredUploadMB = 250;
@@ -845,9 +1026,9 @@
         idbDel(['video']);
         idbPut('image', file);
         store.set('hqr-bg', JSON.stringify({type:'upload-image'}));
-        toast('تم تطبيق الخلفية وحفظها في هذا الجهاز');
+        toast(T.bgSaved);
       }else{
-        toast('الملف كبير جدًا للحفظ — سيظهر في هذه الجلسة فقط');
+        toast(T.bgTooBig);
       }
     });
     $('videoUpload').addEventListener('change', function(e){
@@ -859,9 +1040,9 @@
         idbDel(['image']);
         idbPut('video', file);
         store.set('hqr-bg', JSON.stringify({type:'upload-video'}));
-        toast('تم تطبيق الخلفية وحفظها في هذا الجهاز');
+        toast(T.bgSaved);
       }else{
-        toast('الملف كبير جدًا للحفظ — سيظهر في هذه الجلسة فقط');
+        toast(T.bgTooBig);
       }
     });
 
@@ -922,6 +1103,7 @@
     var radioSelect = $('radioSelect'), radioTitle = $('radioTitle'), radioMeta = $('radioMeta');
 
     var currentIndex = 0;
+    var failedStations = [];
     var wantPlaying = false;       // the user's intent, used to decide whether to reconnect
     var retryCount = 0, retryTimer = null;
     var MAX_RETRIES = 6;
@@ -936,13 +1118,13 @@
     function setPlayIcon(playing, loading){
       playIcon.className = loading ? 'fa-solid fa-spinner' : (playing ? 'fa-solid fa-pause' : 'fa-solid fa-play');
       playBtn.classList.toggle('is-loading', !!loading);
-      playBtn.setAttribute('aria-label', playing ? 'إيقاف البث مؤقتًا' : 'تشغيل الإذاعة');
+      playBtn.setAttribute('aria-label', playing ? T.pauseNow : T.playNow);
     }
     function setMuteIcon(){
       var off = audio.muted || audio.volume === 0;
       muteIcon.className = off ? 'fa-solid fa-volume-xmark' : (audio.volume < .5 ? 'fa-solid fa-volume-low' : 'fa-solid fa-volume-high');
       muteBtn.setAttribute('aria-pressed', audio.muted ? 'true' : 'false');
-      muteBtn.setAttribute('aria-label', audio.muted ? 'إلغاء الكتم' : 'كتم الصوت');
+      muteBtn.setAttribute('aria-label', audio.muted ? T.unmute : T.mute);
     }
     function setRangeFill(){ volumeRange.style.setProperty('--fill', (volumeRange.value * 100) + '%'); }
 
@@ -952,14 +1134,14 @@
       wantPlaying = true;
       if(tabChannel) tabChannel.postMessage({ type: 'play', tabId: TAB_ID });
       setPlayIcon(false, true);
-      setStatus('جارٍ الاتصال بالبث...', 'playing');
+      setStatus(T.connecting, 'playing');
       source.src = radios[currentIndex].url;
       audio.load();
       audio.play().catch(function(err){
         if(err && err.name === 'NotAllowedError'){
           wantPlaying = false;
           setPlayIcon(false);
-          setStatus('اضغط تشغيل لبدء الاستماع', null);
+          setStatus(T.pressPlay, null);
         }
       });
     }
@@ -971,25 +1153,37 @@
       source.removeAttribute('src');
       audio.load();
       setPlayIcon(false);
-      setStatus('البث متوقف', null);
+      setStatus(T.stopped, null);
     }
     function scheduleRetry(){
       if(!wantPlaying) return;
       if(retryCount >= MAX_RETRIES){
+        var candidates = [];
+        for(var ci = 0; ci < radios.length; ci++){
+          if(failedStations.indexOf(ci) === -1 && ci !== currentIndex) candidates.push(ci);
+        }
+        if(candidates.length > 0){
+          var next = candidates[0];
+          failedStations.push(currentIndex);
+          retryCount = 0;
+          toast(T.failover + ' ' + radios[next].name);
+          changeRadio(next, false);
+          return;
+        }
         wantPlaying = false;
         setPlayIcon(false);
-        setStatus('تعذّر الاتصال بالبث حالياً', 'error');
+        setStatus(T.failed, 'error');
         return;
       }
       retryCount++;
       var delay = Math.min(1000 * Math.pow(2, retryCount - 1), 15000);
-      setStatus('انقطع البث، إعادة الاتصال (' + retryCount + '/' + MAX_RETRIES + ')...', 'playing');
+      setStatus(T.reconnecting + ' (' + retryCount + '/' + MAX_RETRIES + ')...', 'playing');
       clearTimeout(retryTimer);
       retryTimer = setTimeout(startStream, delay);
     }
 
-    playBtn.addEventListener('click', function(){ wantPlaying ? stopStream() : startStream(); });
-    retryBtn.addEventListener('click', function(){ retryCount = 0; startStream(); });
+    playBtn.addEventListener('click', function(){ failedStations = []; wantPlaying ? stopStream() : startStream(); });
+    retryBtn.addEventListener('click', function(){ retryCount = 0; failedStations = []; startStream(); });
 
     muteBtn.addEventListener('click', function(){
       audio.muted = !audio.muted;
@@ -1005,11 +1199,12 @@
 
     audio.addEventListener('playing', function(){
       retryCount = 0;
+      failedStations = [];
       setPlayIcon(true);
-      setStatus('يتم الآن تشغيل البث المباشر', 'playing');
+      setStatus(T.nowPlaying, 'playing');
       updateMediaSession('playing');
     });
-    audio.addEventListener('waiting', function(){ if(wantPlaying) setStatus('جارٍ التحميل...', 'playing'); });
+    audio.addEventListener('waiting', function(){ if(wantPlaying) setStatus(T.loading, 'playing'); });
     audio.addEventListener('pause', function(){ if(!wantPlaying) updateMediaSession('paused'); });
     ['error','stalled','ended'].forEach(function(evt){
       audio.addEventListener(evt, function(){ if(wantPlaying) scheduleRetry(); });
@@ -1036,7 +1231,7 @@
         navigator.mediaSession.metadata = new MediaMetadata({
           title: radios[currentIndex].name,
           artist: radios[currentIndex].subtitle,
-          album: 'إذاعة القرآن الكريم - بث مباشر'
+          album: T.album
         });
         navigator.mediaSession.playbackState = state;
       }catch(e){}
@@ -1070,7 +1265,7 @@
     }
     function sleepClearUI(){
       sleepOpts.forEach(function(b){ b.classList.remove('active'); });
-      $('sleepOff').textContent = 'إلغاء';
+      $('sleepOff').textContent = T.cancel;
     }
     function sleepCancel(msg){
       clearInterval(sleepTick); sleepTick = null; sleepEndAt = 0;
@@ -1080,24 +1275,24 @@
     }
     function sleepSet(minutes){
       sleepCancel();
-      if(!minutes){ toast('تم إلغاء مؤقّت النوم'); return; }
+      if(!minutes){ toast(T.sleepOffMsg); return; }
       sleepBaseVolume = audio.volume;
       sleepEndAt = Date.now() + minutes * 60000;
       sleepOpts.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-min') === String(minutes)); });
-      $('sleepOff').textContent = 'إلغاء (' + minutes + ' د)';
-      toast('سيتم إيقاف البث بعد ' + minutes + ' دقيقة');
+      $('sleepOff').textContent = T.cancelP + minutes + ' ' + T.minutesUnit + ')';
+      toast(T.sleepSet + ' ' + minutes + ' ' + T.minutesUnit);
       sleepTick = setInterval(function(){
         var remain = sleepEndAt - Date.now();
         if(remain <= 0){
           var wasPlaying = wantPlaying;
-          sleepCancel(wasPlaying ? 'انتهى مؤقّت النوم — تم إيقاف البث' : 'انتهى مؤقّت النوم');
+          sleepCancel(wasPlaying ? T.sleepDone : T.sleepDoneIdle);
           if(wasPlaying) stopStream();
           return;
         }
         if(remain <= 15000 && sleepBaseVolume !== null){
           audio.volume = Math.max(0, sleepBaseVolume * (remain / 15000));
         }
-        $('sleepOff').textContent = 'إلغاء (' + fmtRemain(remain) + ')';
+        $('sleepOff').textContent = T.cancelP + fmtRemain(remain) + ')';
       }, 500);
     }
     sleepOpts.forEach(function(b){
@@ -1118,7 +1313,7 @@
             clearTimeout(retryTimer);
             audio.pause();
             setPlayIcon(false);
-            setStatus('يجري التشغيل في تبويب آخر', null);
+            setStatus(T.otherTab, null);
           }
         };
       }
@@ -1134,7 +1329,7 @@
 
     /* ---------- Share ---------- */
     function pageData(){
-      return { url: window.location.href.split('#')[0], title: document.title || 'إذاعة القرآن الكريم - بث مباشر' };
+      return { url: window.location.href.split('#')[0], title: document.title || T.docTitle };
     }
     function popup(u){
       var w = window.open(u, '_blank', 'noopener,noreferrer,width=650,height=520');
@@ -1167,8 +1362,8 @@
 
     $('copyLinkBtn').addEventListener('click', function(){
       var url = pageData().url;
-      var done = function(){ toast('تم نسخ الرابط'); };
-      var fail = function(){ toast('لم يتم النسخ، انسخ الرابط من شريط العنوان'); };
+      var done = function(){ toast(T.copied); };
+      var fail = function(){ toast(T.copyFail); };
       if(navigator.clipboard && window.isSecureContext){
         navigator.clipboard.writeText(url).then(done, fail);
       }else{
