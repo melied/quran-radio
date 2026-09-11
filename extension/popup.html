@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="popup.css"/>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" fill="#c9a24a"/></svg>
+    <span id="popupTitle">إذاعة القرآن الكريم</span>
+  </div>
+  <button class="lang-btn" id="langBtn" type="button">EN</button>
+</header>
+
+<label class="sel-label" for="stationSelect" id="stationLabel">اختر الإذاعة</label>
+<select id="stationSelect"></select>
+
+<div class="now">
+  <div class="now-icon">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M7.5 3h9A1.5 1.5 0 0118 4.5v15a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 016 19.5v-15A1.5 1.5 0 017.5 3z" fill="#c9a24a"/><path d="M9 7h6M9 10h6M9 13h6" stroke="#0b1f1a" stroke-width="1.4" stroke-linecap="round"/></svg>
+  </div>
+  <div class="now-text">
+    <div class="now-title" id="nowTitle">—</div>
+    <div class="now-sub" id="nowSub">—</div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="play-btn" id="playBtn" type="button" aria-label="تشغيل">
+    <span id="playIcon">
+      <svg viewBox="0 0 24 24" width="24" height="24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+    </span>
+    <span id="pauseIcon" hidden>
+      <svg viewBox="0 0 24 24" width="24" height="24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>
+    </span>
+  </button>
+  <div class="vol">
+    <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="#7fd6ae"/><path d="M16 8a5 5 0 010 8" stroke="#7fd6ae" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    <input type="range" id="volumeRange" min="0" max="1" step="0.05" value="1"/>
+  </div>
+</div>
+
+<div class="sleep-row" role="group" aria-label="مؤقّت النوم">
+  <span class="sleep-label">
+    <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" fill="#c9a24a"/></svg>
+    <span id="sleepTitle">مؤقّت النوم (دقائق)</span>
+  </span>
+  <div class="sleep-chips">
+    <button class="sq" data-min="5" type="button">5</button>
+    <button class="sq" data-min="10" type="button">10</button>
+    <button class="sq" data-min="15" type="button">15</button>
+    <button class="sq" data-min="30" type="button">30</button>
+    <button class="sq" data-min="45" type="button">45</button>
+    <button class="sq" data-min="60" type="button">60</button>
+    <button class="sq sq-x" data-min="0" id="sleepOff" type="button">إلغاء</button>
+  </div>
+</div>
+
+<div class="status-row">
+  <span class="dot" id="statusDot"></span>
+  <span id="statusLabel">جاهز للتشغيل</span>
+</div>
+
+<footer>
+  <a href="#" id="openFull">افتح الصفحة الكاملة</a>
+</footer>
+
+<script src="stations.js"></script>
+<script src="i18n.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

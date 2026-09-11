@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "إذاعة القرآن الكريم — بث مباشر",
+  "short_name": "إذاعة القرآن",
+  "version": "1.0.0",
+  "description": "استمع إلى إذاعات القرآن الكريم من أي صفحة: ست إذاعات موثّقة، تشغيل مستمر في الخلفية، مؤقّت نوم، وواجهة عربية/إنجليزية.",
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "action": {
+    "default_title": "إذاعة القرآن الكريم",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/16.png",
+      "32": "icons/32.png",
+      "48": "icons/48.png",
+      "128": "icons/128.png"
+    }
+  },
+  "background": {
+    "service_worker": "sw-background.js"
+  },
+  "permissions": ["offscreen", "storage"],
+  "minimum_chrome_version": "116",
+  "commands": {
+    "toggle-play": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+U",
+        "mac": "Command+Shift+U"
+      },
+      "description": "تشغيل/إيقاف الإذاعة من أي صفحة"
+    }
+  }
+}
